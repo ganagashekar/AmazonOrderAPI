@@ -93,38 +93,7 @@ namespace AmazonOrderAPI.Business.OrderMonitor
                             order = x.ToDestination<Amazon.APIEngine.Models.Order, Order>();
                             List<DTO.PaymentExecutionDetailItem> paymentExecutionDetailItems = new List<DTO.PaymentExecutionDetailItem>();
                             order.SellerId = Seller.Id;
-                            #region comment
-                            //order.AmazonOrderId = x.AmazonOrderId;
-                            //order.PurchaseDate = x.PurchaseDate;
-                            //order.LastUpdateDate = x.LastUpdateDate;
-                            //order.OrderStatus = x.OrderStatus;
-                            //order.SellerOrderId = x.SellerOrderId;
-                            //order.FulfillmentChannel = x.FulfillmentChannel;
-                            //order.SalesChannel = x.SalesChannel;
-
-                            //order.ShipServiceLevel = x.ShipServiceLevel;
-                            //order.NumberOfItemsShipped = x.NumberOfItemsShipped;
-                            //order.NumberOfItemsUnshipped = x.NumberOfItemsUnshipped;
-                            //order.PaymentMethod = x.PaymentMethod;
-                            //order.MarketplaceId = x.MarketplaceId;
-                            //order.ShipmentServiceLevelCategory = x.ShipmentServiceLevelCategory;
-                            //order.EasyShipShipmentStatus = x.EasyShipShipmentStatus;
-                            //order.CbaDisplayableShippingLabel = x.CbaDisplayableShippingLabel;
-                            //order.OrderType = x.OrderType;
-                            //order.EarliestShipDate = x.EarliestShipDate;
-                            //order.LatestShipDate = x.LatestShipDate;
-                            //order.EarliestDeliveryDate = x.EarliestDeliveryDate;
-                            //order.LatestDeliveryDate = x.LatestDeliveryDate;
-                            //order.IsBusinessOrder = x.IsBusinessOrder;
-                            //order.IsPrime = x.IsPrime;
-                            //order.IsPremiumOrder = x.IsPremiumOrder;
-                            //order.IsGlobalExpressEnabled = x.IsGlobalExpressEnabled;
-                            //order.ReplacedOrderId = x.ReplacedOrderId;
-                            //order.IsReplacementOrder = x.IsReplacementOrder;
-                            //order.PromiseResponseDueDate = x.PromiseResponseDueDate;
-                            //order.IsEstimatedShipDateSet = x.IsEstimatedShipDateSet;
-                            //order.IsSoldByAB = x.IsSoldByAB;
-                            #endregion
+                           
 
                             order.DefaultShipFromLocationAddress = new DTO.Address("");
                             if (x.DefaultShipFromLocationAddress.IsNotNull())
@@ -369,3 +338,37 @@ namespace AmazonOrderAPI.Business.OrderMonitor
 
     }
 }
+
+
+#region comment
+//order.AmazonOrderId = x.AmazonOrderId;
+//order.PurchaseDate = x.PurchaseDate;
+//order.LastUpdateDate = x.LastUpdateDate;
+//order.OrderStatus = x.OrderStatus;
+//order.SellerOrderId = x.SellerOrderId;
+//order.FulfillmentChannel = x.FulfillmentChannel;
+//order.SalesChannel = x.SalesChannel;
+
+//order.ShipServiceLevel = x.ShipServiceLevel;
+//order.NumberOfItemsShipped = x.NumberOfItemsShipped;
+//order.NumberOfItemsUnshipped = x.NumberOfItemsUnshipped;
+//order.PaymentMethod = x.PaymentMethod;
+//order.MarketplaceId = x.MarketplaceId;
+//order.ShipmentServiceLevelCategory = x.ShipmentServiceLevelCategory;
+//order.EasyShipShipmentStatus = x.EasyShipShipmentStatus;
+//order.CbaDisplayableShippingLabel = x.CbaDisplayableShippingLabel;
+//order.OrderType = x.OrderType;
+//order.EarliestShipDate = x.EarliestShipDate;
+//order.LatestShipDate = x.LatestShipDate;
+//order.EarliestDeliveryDate = x.EarliestDeliveryDate;
+//order.LatestDeliveryDate = x.LatestDeliveryDate;
+//order.IsBusinessOrder = x.IsBusinessOrder;
+//order.IsPrime = x.IsPrime;
+//order.IsPremiumOrder = x.IsPremiumOrder;
+//order.IsGlobalExpressEnabled = x.IsGlobalExpressEnabled;
+//order.ReplacedOrderId = x.ReplacedOrderId;
+//order.IsReplacementOrder = x.IsReplacementOrder;
+//order.PromiseResponseDueDate = x.PromiseResponseDueDate;
+//order.IsEstimatedShipDateSet = x.IsEstimatedShipDateSet;
+//order.IsSoldByAB = x.IsSoldByAB;
+#endregion
