@@ -1,0 +1,400 @@
+﻿@model OrderItemStatusDetail
+
+
+@section PageSpecificStyles{
+    <style>
+        #snoAlertBox {
+            position: absolute;
+            z-index: 1400;
+            top: 2%;
+            right: 4%;
+            margin: 0px auto;
+            text-align: center;
+            display: none;
+        }
+    </style>
+}
+
+
+<form id="OrderDetails-form" asp-controller="Home" asp-action="SaveOrUpdateOrderDetails" Method="post">
+
+    <input type="hidden" asp-for="Id" />
+
+
+
+    <button type="button" class="close" onclick="CloseOrderModel()">&times;</button>
+
+
+
+    <div class="container">
+        <fieldset style="padding:10px;    border: 1px groove #f7f7f738 !important;">
+            <legend class="w-auto">Item Details</legend>
+            <div class="row">
+
+                <div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-3">
+                    <label asp-for="Title">
+                        @await Html.PartialAsync("Common/Label", "Title")
+                    </label>
+                    <div>
+                        <input type="text" readonly class="form-control" value="@Html.Raw(Model.Title)">
+                    </div>
+                </div>
+                <div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-3">
+                    <label asp-for="ASIN">
+                        @await Html.PartialAsync("Common/Label", "ASIN")
+                    </label>
+                    <div>
+                        <input type="text" readonly class="form-control" asp-for="ASIN">
+                    </div>
+                </div>
+
+                <div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-3">
+                    <label asp-for="OrderItemId">
+                        @await Html.PartialAsync("Common/Label", "Order ItemId")
+                    </label>
+                    <div>
+                        <input type="text" readonly class="form-control" asp-for="OrderItemId">
+                    </div>
+                </div>
+
+                <div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-3">
+                    <label asp-for="QuantityOrdered">
+                        @await Html.PartialAsync("Common/Label", "Quantity Ordered")
+                    </label>
+                    <div>
+                        <input type="text" readonly class="form-control" asp-for="QuantityOrdered">
+                    </div>
+                </div>
+                <div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-3">
+                    <label asp-for="QuantityShipped">
+                        @await Html.PartialAsync("Common/Label", "Quantity Shipped")
+                    </label>
+                    <div>
+                        <input type="text" readonly class="form-control" asp-for="QuantityShipped">
+                    </div>
+                </div>
+
+                <div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-3">
+                    <label asp-for="ConditionId">
+                        @await Html.PartialAsync("Common/Label", "Condition Id")
+                    </label>
+                    <div>
+                        <input type="text" readonly class="form-control" asp-for="ConditionId">
+                    </div>
+                </div>
+
+                <div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-3">
+                    <label asp-for="ConditionSubTypeId">
+                        @await Html.PartialAsync("Common/Label", "Condition SubTypeId")
+                    </label>
+                    <div>
+                        <input type="text" readonly class="form-control" asp-for="ConditionSubTypeId">
+                    </div>
+                </div>
+                <div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-3">
+                    <label asp-for="SellerSKU">
+                        @await Html.PartialAsync("Common/Label", "SKU")
+                    </label>
+                    <div>
+                        <input type="text" readonly class="form-control" asp-for="SellerSKU">
+                    </div>
+                </div>
+
+                <div class="clearfix">
+                </div>
+                <div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-3">
+                    <label asp-for="OrderDate">
+                        @await Html.PartialAsync("Common/Label", "Order Date")
+                    </label>
+                    <div>
+                        <input type="text" readonly class="form-control" asp-for="OrderDate">
+                    </div>
+                </div>
+                <div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-3">
+                    <label asp-for="LastUpdatedDate">
+                        @await Html.PartialAsync("Common/Label", "Last Updated Date")
+                    </label>
+                    @if (Model.Status == "Failed")
+                    {
+                        <div>
+                            <input type="text" class="form-control" asp-for="LastUpdatedDate">
+                        </div>
+                    }
+                    else
+                    {
+                        <div>
+                            <input type="text" readonly class="form-control" asp-for="LastUpdatedDate">
+                        </div>
+                    }
+                </div>
+
+                <div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-3">
+                    <label asp-for="LatestShipDate">
+                        @await Html.PartialAsync("Common/Label", "Latest ShipDate")
+                    </label>
+                    <div>
+                        <input type="text" readonly class="form-control" asp-for="LatestShipDate">
+                    </div>
+                </div>
+
+                <div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-3">
+                    <label asp-for="IsPrime">
+                        @await Html.PartialAsync("Common/Label", "Prime")
+                    </label>
+                    <div>
+                        <toggle-button>
+                            <input asp-for="IsPrime" readonly class="form-control" disabled type="checkbox">
+                        </toggle-button>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row">
+
+                <div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-3">
+                    <label asp-for="IsGift">
+                        @await Html.PartialAsync("Common/Label", "Gift")
+                    </label>
+                    <div>
+                        <toggle-button>
+                            <input asp-for="IsGift" readonly class="form-control" disabled type="checkbox">
+                        </toggle-button>
+                    </div>
+                </div>
+
+                <div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-3">
+                    <label asp-for="IsSerialNumberRequired">
+                        @await Html.PartialAsync("Common/Label", "SerialNumberRequired")
+                    </label>
+                    <div>
+                        <toggle-button>
+                            <input asp-for="IsSerialNumberRequired" readonly class="form-control" disabled type="checkbox">
+                        </toggle-button>
+                    </div>
+                </div>
+
+                <div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-3">
+                    <label asp-for="Status">
+                        @await Html.PartialAsync("Common/Label", "Status")
+                    </label>
+                    <div>
+                        <input type="text" readonly class="form-control" asp-for="Status">
+                    </div>
+                </div>
+                <div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-3">
+                    <label asp-for="Reason">
+                        @await Html.PartialAsync("Common/Label", "Reason")
+                    </label>
+                    <div>
+                        <textarea type="text" readonly class="form-control" asp-for="Reason"> </textarea>
+                    </div>
+                </div>
+
+            </div>
+</fieldset>
+
+        <fieldset style="padding:0 10px 10px;    border: 1px groove #f7f7f738 !important;">
+            <legend class="w-auto">Pickup Details</legend>
+            <div class="row">
+                <div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-3">
+                    <label asp-for="WarehouseId">
+                        @await Html.PartialAsync("Common/Label", "WareHouse")
+                    </label>
+                    <div class="">
+                        <select asp-for="WarehouseId" required asp-items="@(new SelectList(Model.WareHouse,"Id","Text"))" class="form-control single-select"></select>
+                    </div>
+                </div>
+
+
+                <div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-3">
+                    <label asp-for="ConsignmentNo">
+                        @await Html.PartialAsync("Common/Label", "SKU")
+                    </label>
+                    <div>
+                        <input type="text" readonly class="form-control" asp-for="SellerSKU" />
+                    </div>
+                </div>
+
+                <div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-3">
+                    <label asp-for="ConsignmentNo">
+                        @await Html.PartialAsync("Common/Label", "Consignment No")
+                    </label>
+                    <div>
+                        <input type="text" readonly class="form-control" asp-for="ConsignmentNo" />
+                    </div>
+                </div>
+
+                <div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-3">
+                    <label asp-for="PickupMobileNumber">
+                        @await Html.PartialAsync("Common/Label", "Pickup MobileNumber")
+                    </label>
+                    <div>
+                        <input type="text" readonly class="form-control" asp-for="PickupMobileNumber">
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+
+
+
+
+                
+                <div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-3">
+                    <label asp-for="PickupUserName">
+                        @await Html.PartialAsync("Common/Label", "Pickup Name")
+                    </label>
+                    <div>
+                        <input type="text" readonly class="form-control" asp-for="PickupUserName">
+                    </div>
+                </div>
+
+                <div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-6">
+                    <label asp-for="PickupAddress">
+                        @await Html.PartialAsync("Common/Label", "Pickup Address")
+                    </label>
+                    <div>
+                        <textarea type="text" rows="1" readonly class="form-control" asp-for="PickupAddress"> </textarea>
+                    </div>
+                </div>
+
+
+
+
+                <div class="clearfix">
+                </div>
+
+
+
+            </div>
+        </fieldset>
+
+
+        <fieldset style="padding:0 10px 10px;    border: 1px groove #f7f7f738 !important;">
+            <legend class="w-auto">DropOff Details</legend>
+            <div class="row">
+
+
+
+                <div class="clearfix">
+                </div>
+                <div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-3">
+                    <label asp-for="DropMobileNumber">
+                        @await Html.PartialAsync("Common/Label", "Drop Phone")
+                    </label>
+                    <div>
+                        <input type="text" readonly class="form-control" asp-for="DropMobileNumber">
+                    </div>
+                </div>
+
+                <div class="clearfix">
+                </div>
+
+                <div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-3">
+                    <label asp-for="DropUserName">
+                        @await Html.PartialAsync("Common/Label", "Drop User Name")
+                    </label>
+                    <div>
+                        <input type="text" readonly class="form-control" asp-for="DropUserName">
+                    </div>
+                </div>
+
+
+                <div class="clearfix">
+                </div>
+
+                <div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-6">
+                    <label asp-for="DropAddress">
+                        @await Html.PartialAsync("Common/Label", "Drop Address")
+                    </label>
+                    <div>
+                        <textarea readonly rows="1" class="form-control" asp-for="DropAddress"> </textarea>
+                    </div>
+                </div>
+                
+
+                <div class="clearfix">
+                </div>
+
+            </div>
+
+
+        </fieldset>
+
+        <div class="text-right">
+            <button type="submit" disabled="@Model.DisablSaving" class="btn btn-outline-primary mb-3">Save</button>
+
+            <button type="button" class="btn btn-outline-danger mb-3" onclick="CloseOrderModel()">Close</button>
+        </div>
+    </div>
+    <div id="snoAlertBox" class="alert alert-success" data-alert="alert"></div>
+
+    @*<div class="modal-footer">
+
+        <button type="submit" disabled="@Model.DisablSaving" class="btn btn-outline-primary mb-3">Save</button>
+
+        <button type="button" class="btn btn-outline-danger mb-3" onclick="CloseOrderModel()">Close</button>
+    </div>*@
+</form>
+
+
+    <script>
+        function CloseOrderModel() {
+
+            $('#OrderModal').modal('hide')
+
+            $('#OrderModal').toggle();
+
+            LoadOrderReport(StatusId)
+        }
+
+        $("#OrderDetails-form").submit(function (e) {
+
+            e.preventDefault();
+            if ($('#WarehouseId').val() == 0) {
+
+                $('#snoAlertBox').html('Please Select WareHouse')
+                $('#snoAlertBox').show();
+                $('#WarehouseId').focus();
+                return;
+
+            }
+
+            $('#loadingDiv').show();
+            var form = $(this);
+            var url = form.attr('action');
+
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: form.serialize(), // serializes the form's elements.
+                success: function (data) {
+                    $('#loadingDiv').hide();
+                    if (data) {
+                        $('#snoAlertBox').html('Order Updated')
+                        $('#snoAlertBox').show();
+
+                        CloseOrderModel();
+                    }
+                    else {
+                        $('#snoAlertBox').html('Order Updation Failed !....')
+                        $('#snoAlertBox').show();
+                    }
+                    closeSnoAlertBox();
+                },
+                error: function (textStatus, errorThrown) {
+                    $('#loadingDiv').hide();
+                    console.log('OrderDetails Submit Failed textStatus = ' + textStatus + ' errorThrown = ' + errorThrown);
+                }
+            });
+
+        });
+
+        function closeSnoAlertBox() {
+            window.setTimeout(function () {
+                $("#snoAlertBox").fadeOut()
+            }, 3000);
+        }
+    </script>
+

@@ -1,0 +1,143 @@
+﻿@model IEnumerable<AmazonOrderAPI.Business.Model.WarehouseVM>
+@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IViewLocalizer Localizer
+@{ Layout = null;}
+
+<script src="~/dist/js/bundle.min.js" asp-append-version="true"></script>
+
+<div class="card mt-3" id="divwarehousetable">
+    @*<h5 class="card-header">@Localizer["PanelTitle"]</h5>*@
+    <div class="card-body">
+        <p>
+            <a class="btn btn-outline-primary mb-3" onclick="AddOrEditWareHouse(0)">Create New</a>
+        </p>
+        <div class="row">
+            <div class="col-12">
+                <div class="table-responsive ">
+                    <table id="warehousetable" class="table table-striped" width="100%">
+                        <thead>
+                            <tr>
+
+                                <th>
+                                    @Html.DisplayNameFor(model => model.WarehouseLocationCode)
+                                </th>
+
+                                <th>
+                                    @Html.DisplayNameFor(model => model.AddressLine1)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.AddressLine2)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.AddressLine3)
+                                </th>
+
+                                <th>
+                                    @Html.DisplayNameFor(model => model.PostalCode)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Name)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Phone)
+                                </th>
+
+                                <th>
+                                    @Html.DisplayNameFor(model => model.IsActive)
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.WarehouseLocationCode)
+                                    </td>
+
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.AddressLine1)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.AddressLine2)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.AddressLine3)
+                                    </td>
+
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.PostalCode)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Name)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Phone)
+                                    </td>
+
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.IsActive)
+                                    </td>
+                                    <td>
+                                        @*@Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |*@
+
+                                        <a class="btn btn-outline-primary ls-modal" onclick="AddOrEditWareHouse(@item.Id)" href="#" data-Id="@item.Id">@Localizer["TableButtonEdit"]</a>
+                                        @*<a class="btn btn-outline-danger" onclick="DeleteWareHouse(@item.Id)">@Localizer["TableButtonDelete"]</a>*@
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+                <div class="modal-body">
+                    <p>Loading..</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    $('.ls-modal').on('click', function (e) {
+      
+        e.preventDefault();
+        $('#myModal').modal('show').find('.modal-body').load('/Configuration/GetWarehouseDetails?Id=' + e.currentTarget.dataset.id);
+    });
+
+    $('.AddWareHouse').on('click', function (e) {
+      
+        e.preventDefault();
+        $('#myModal').modal('show').find('.modal-body').load('/Configuration/GetWarehouseDetails?Id=0&SellerId=' + $('#HDNSellerId').val());
+
+    });
+
+    function AddOrEditWareHouse(id) {
+      
+        $('#myModal').modal('show').find('.modal-body').load('/Configuration/GetWarehouseDetails?Id=' + id+'&SellerId=' + $('#HDNSellerId').val());
+    }
+
+    function DeleteWareHouse(Id) {
+      
+        $.ajax({
+            type: "Get",
+            url: '/Configuration/DeleteWareHouse?Id=' + Id + '&SellerId=' + $('#HDNSellerId').val(),
+
+            success: function (data) {
+                $('#divwarehousetable').html(data);
+
+            }
+        });
+    }
+</script>

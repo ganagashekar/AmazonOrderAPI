@@ -1,0 +1,162 @@
+﻿@{
+    ViewBag.Title = "DashBoard";
+    @ViewData["DashBoard"]
+}
+
+@model AmazonOrderAPI.Business.Model.Dashboard.DashBoardOrder
+<!-- Page Heading -->
+<!-- Content Row -->
+<style>
+    #DashboardOrderModal {
+        width: 99%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .card .border-left-primary {
+        border-radius: 4px;
+        background: #fff;
+        box-shadow: 0 6px 10px rgba(0,0,0,.08), 0 0 6px rgba(0,0,0,.05);
+        transition: .3s transform cubic-bezier(.155,1.105,.295,1.12),.3s box-shadow,.3s -webkit-transform cubic-bezier(.155,1.105,.295,1.12);
+        cursor: pointer;
+    }
+
+        .card .border-left-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(0,0,0,.12), 0 4px 8px rgba(0,0,0,.06);
+        }
+
+</style>
+
+<div class="row">
+    <!-- Earnings (Monthly) Card Example -->
+
+    @foreach (var Cards in Model.ListCountCards)
+    {
+
+        <div class="col-xl-3 col-md-6 mb-4">
+
+            <div class="card border-left-primary shadow h-100 py-2">
+                <a class="card-block stretched-link text-decoration-none" href="#" data-toggle="modal" data-target="#DashboardOrderModal" onclick="LoadOrderReport(@Cards.StatusId)">
+                    <div class="card-body">
+
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">@Cards.CardName</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">@Cards.CardValue</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="@Cards.Class"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    @if (Cards.StatusId == 10)
+                    {
+                        <a href="#" style="text-align:center;color:#808080" onclick="RetryAll(@Cards.StatusId)" title="Retry All"><b>Retry All</b></a>
+                    }
+                </a>
+            </div>
+        </div>
+
+    }
+</div>
+
+<div class="modal fade" id="DashboardOrderModal" tabindex="-1" role="dialog"  aria-labelledby="myModalLabel">
+    <div class="modal-dialog mw-100 w-100" role="document">
+
+        <div class="modal-content">
+            <a href="#" style="text-align: right;" class="close" onclick="CloseDashboardwindow()" data-dismiss="modal">&times;</a>
+            <div class="DashboardOrderModalmodal-body modal-body">
+
+            </div>
+            <div class="modal-footer py-1">
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="CloseDashboardwindow()">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+    <script>
+
+        var StatusId = null;
+        // $('#DashboardOrderModal').modal();
+
+        function LoadOrderReport(id) {
+
+            StatusId = id;
+            var SellerItems = [];
+            var Sellerselected = $("#SellerId option:selected");
+
+            Sellerselected.each(function () {
+                SellerItems.push($(this).val())
+            });
+
+            $('#DashboardOrderModal').modal('show').find('.DashboardOrderModalmodal-body').empty();
+
+            var Model = { "FromDate": moment($("#FromDate").val(), 'DD/MM/YYYY').format('YYYY-MM-DD'), "ToDate": moment($("#ToDate").val(), 'DD/MM/YYYY').format('YYYY-MM-DD'), "StatusItems": id, "SellerId": SellerItems.join(',') }
+            $('#loadingDiv').show();
+            $.ajax({
+                type: "Post",
+                data: Model,
+                url: '/Dashboard/OrderReport',
+                success: function (data) {
+
+                    $('#loadingDiv').hide();
+                    $('#DashboardOrderModal').modal('show').find('.DashboardOrderModalmodal-body').html(data);
+
+                },
+                error: function (textStatus, errorThrown) {
+                    $('#loadingDiv').hide();
+                    console.log('LoadOrderReport Failed textStatus = ' + textStatus + ' errorThrown = ' + errorThrown);
+                }
+            });
+        }
+
+        function CloseOrderModel() {
+
+            $('#DashboardOrderModal').modal('show')
+
+        }
+
+
+        function CloseDashboardwindow() {
+
+            debugger;
+            $("body").removeClass("modal-backdrop fade show")
+            $("div.modal-backdrop.fade.show").remove()
+        }
+        $(function () {
+
+            $("#DashBoardForm").trigger("click");
+        });
+
+        function RetryAll() {
+
+
+            var SellerItems = [];
+            var Sellerselected = $("#SellerId option:selected");
+
+            Sellerselected.each(function () {
+                SellerItems.push($(this).val())
+            });
+
+            var Model = { "FromDate": moment($("#FromDate").val(), 'DD/MM/YYYY').format('YYYY-MM-DD'), "ToDate": moment($("#ToDate").val(), 'DD/MM/YYYY').format('YYYY-MM-DD'), "StatusItems": 10, "SellerId": SellerItems.join(',') }
+            alert("Retrying Is in Progress,we will update you once completed")
+            $.ajax({
+                type: "Post",
+                data: Model,
+                url: '/Home/OrderReportAsync',
+
+                success: function (data) {
+
+                    alert("Retrying is done")
+                    // $('#loadingDiv').hide();
+                    //$('#DashboardOrderModal').modal('show').find('.DashboardOrderModalmodal-body').html(data);
+
+                }
+            });
+
+        }
+    </script>
+

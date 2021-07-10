@@ -1,0 +1,199 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@model AmazonOrderAPI.Business.Model.Reports.OrderStatusReport
+@inject IViewLocalizer Localizer
+
+@*bellow styles is not working in .css file . Added by subrat*@
+<style>
+    .block_select .btn-group {
+        width: 100% !important;
+    }
+
+        .block_select .btn-group button {
+            text-align: left !important;
+        }
+    .bootstrap-datetimepicker-widget.dropdown-menu {
+        width: auto !important;
+    }
+    input[readonly] {
+        cursor: pointer;
+    }
+    </style>
+
+
+<div class="row">
+    <!--Input - text -->
+    <div class="col-md-3">
+
+        <label asp-for="FromDate" class="col-sm-12 text-left col-form-label">
+            FromDate
+        </label>
+        <div class="col-sm-12">
+            <div class="input-group date" id="FromDate-picker" data-target-input="nearest">
+                <input asp-for="FromDate" type="text" value="@Model.FromDate.Value.ToString("dd/MM/yyyy")" class="form-control datetimepicker-input">
+                <div class="input-group-append" data-target="#FromDate-picker" data-toggle="datetimepicker" >
+                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <label asp-for="ToDate" class="col-sm-12 text-left col-form-label">
+            To Date
+        </label>
+        <div class="col-sm-12">
+            <div class="input-group date" id="ToDate-picker" data-target-input="nearest">
+                <input asp-for="ToDate" type="text" value="@Model.ToDate.Value.ToString("dd/MM/yyyy")" class="form-control datetimepicker-input">
+                <div class="input-group-append" data-target="#ToDate-picker" data-toggle="datetimepicker" >
+                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="row">
+            <div class="col-md-5">
+                <div class="form-group row" id="SelectSellerId">
+                    <label asp-for="SellerId" class="col-sm-12 text-left col-form-label">
+                        Sellers
+                    </label>
+                    <div class="col-sm-12 block_select" style="background: #ffffff;border-radius:5px">
+                        <select asp-for="SellerId" multiple="multiple" asp-items="@(new SelectList(Model.Sellers,"Id","Text"))" class="form-control"></select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-5" id="SelectStatus" style="width:100%">
+                <label asp-for="StatusItems" class="col-sm-12 text-left col-form-label">
+                    Status
+                </label>
+                <div class="col-sm-12">
+                    <div class="col-sm-12 block_select" style="background: #ffffff;border-radius:5px">
+                        <select asp-for="StatusItems" multiple="multiple" asp-items="@(new SelectList(Model.Status,"Id","Text"))" class="btn btn-outline-primary"></select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group row" style="width:50px;margin-left:5px">
+                    <label class="col-sm-12 col-form-label">
+                        &nbsp;
+                    </label>
+                    <div class="col-sm-12">
+                        <button id="btnorderfilter" class="btn btn-outline-primary" title="Search" type="submit"> <i class="fa fa-search"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*<div class="col-md-3">
+            <div class="form-group row" id="SelectSellerId">
+                <label asp-for="SellerId" class="col-sm-12 text-left col-form-label">
+                    Sellers
+                </label>
+                <div class="col-sm-12" style="background: #ffffff;border-radius:12px">
+                    <select asp-for="SellerId" multiple="multiple" asp-items="@(new SelectList(Model.Sellers,"Id","Text"))" class="form-control"></select>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3" id="SelectStatus" style="width:150px">
+            <label asp-for="StatusItems" class="col-sm-4 col-form-label">
+                Status
+            </label>
+            <div class="col-sm-9">
+                <div class="col-sm-12" style="background: #ffffff;border-radius:12px">
+                    <select asp-for="StatusItems" multiple="multiple" asp-items="@(new SelectList(Model.Status,"Id","Text"))" class="btn btn-outline-primary"></select>
+                </div>
+            </div>
+        </div>*@
+
+    @*<div class="col-md-1">
+            <div class="form-group row" style="width:50px;margin-left:5px">
+                <label class="col-sm-4 col-form-label">
+                    &nbsp;
+                </label>
+                <div class="col-sm-9">
+                    <button id="btnorderfilter" class="btn btn-outline-primary" title="Search" type="submit"> <i class="fa fa-search"></i></button>
+                </div>
+            </div>
+        </div>*@
+</div>
+
+
+
+    <script type="text/javascript">
+
+        $(function () {
+            
+            //$.fn.datepicker.defaults.format = "dd/mm/yyyy";
+            $('#FromDate-picker').datetimepicker({ pickTime: false, format: "DD/MM/YYYY", autoclose: true});
+            $('#ToDate-picker').datetimepicker({ pickTime: false, format: "DD/MM/YYYY", autoclose: true });
+            
+            $(document).on('mouseup touchend', function (e) {
+                var container = $('.bootstrap-datetimepicker-widget');
+                if (!container.is(e.target) && container.has(e.target).length === 0) {
+                    container.parent().datetimepicker('hide');
+                }
+            });
+
+            $('#StatusItems').multiselect({
+                allSelectedText: 'All',
+                includeSelectAllOption: true
+            }).multiselect('selectAll', false).multiselect('updateButtonText');;
+
+            $('#SellerId').multiselect({
+                allSelectedText: 'All',
+                includeSelectAllOption: true
+            }).multiselect('selectAll', false).multiselect('updateButtonText');;
+
+            $('#btnSelected').click(function () {
+                var selected = $("#lstFruits option:selected");
+                var message = "";
+                selected.each(function () {
+                    message += $(this).text() + " " + $(this).val() + "\n";
+                });
+                alert(message);
+            });
+        });
+
+        $("#OrderReportForm").submit(function (e) {
+
+            e.preventDefault();
+            var StatusItems = [];
+            var SellerItems = [];
+            var selected = $("#StatusItems option:selected");
+
+            var Sellerselected = $("#SellerId option:selected");
+
+            Sellerselected.each(function () {
+                SellerItems.push($(this).val())
+            });
+
+            selected.each(function () {
+                StatusItems.push($(this).val())
+            });
+
+            var Model = { "FromDate": moment($("#FromDate").val(), 'DD/MM/YYYY').format('YYYY-MM-DD'), "ToDate": moment($("#ToDate").val(), 'DD/MM/YYYY').format('YYYY-MM-DD'), "StatusItems": StatusItems.join(','), "SellerId": SellerItems.join(',') }
+
+            $('#loadingDiv').show();
+            var form = $(this);
+            var url = form.attr('action');
+
+            $.ajax({
+                type: "POST",
+                url: url,
+                // data: form.serialize(),
+                data: Model,// serializes the form's elements.
+                success: function (data) {
+                    $('#StatusReport').empty().html(data);
+                    $('#loadingDiv').hide();
+                },
+                error: function (textStatus, errorThrown) {
+                    $('#loadingDiv').hide();
+                    console.log('StatusReport Failed textStatus = ' + textStatus + ' errorThrown = ' + errorThrown);
+                }
+            });
+
+        });
+    </script>

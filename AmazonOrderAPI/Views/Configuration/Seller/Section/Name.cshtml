@@ -1,0 +1,26 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@model AmazonOrderAPI.Business.Model.Seller.SellerVM
+@inject IViewLocalizer Localizer
+<input type="hidden" id="HDNSellerId" value="@Model.Id" />
+<div class="card mt-3">
+    <div class="card-body">
+        <!--Input - text -->
+        <div class="form-group row">
+            <label asp-for="SellerId" class="col-sm-3 col-form-label">
+                @await Html.PartialAsync("Seller/Section/Label", "SellerId")
+            </label>
+            <div class="col-sm-9">
+                <input type="text" required class="form-control" asp-for="SellerId">
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label asp-for="SellerName" class="col-sm-3 col-form-label">
+                @await Html.PartialAsync("Seller/Section/Label", "SellerName")
+            </label>
+            <div class="col-sm-9">
+                <input type="text" required class="form-control" asp-for="SellerName">
+            </div>
+        </div>
+    </div>
+</div>

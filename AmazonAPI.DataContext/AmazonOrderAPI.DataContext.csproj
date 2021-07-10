@@ -1,0 +1,39 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup Label="Globals">
+    <SccProjectName>SAK</SccProjectName>
+    <SccProvider>SAK</SccProvider>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccLocalPath>SAK</SccLocalPath>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="AmazonConfig\**" />
+    <EmbeddedResource Remove="AmazonConfig\**" />
+    <None Remove="AmazonConfig\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Nito.AsyncEx" Version="5.1.0" />
+    <PackageReference Include="System.Xml.XmlDocument" Version="4.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AmazonOrderCommon\AmazonOrderExtentions.csproj" />
+    <ProjectReference Include="..\SellingPartnerCore\Amazon.APIEngine\Amazon.APIEngine.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Microsoft.EntityFrameworkCore">
+      <HintPath>..\LIb\Microsoft.EntityFrameworkCore.dll</HintPath>
+    </Reference>
+    <Reference Include="MWSClientCsRuntime-1.0">
+      <HintPath>..\LIb\MWSClientCsRuntime-1.0.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

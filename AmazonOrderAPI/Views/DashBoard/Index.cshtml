@@ -1,0 +1,75 @@
+﻿
+@model OrderStatusReport
+@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IViewLocalizer Localizer
+@{
+    ViewBag.Title = Localizer["DashBoard"];
+    Layout = "_Layout";
+}
+<div class="container-fluid">
+    <!-- Page Heading -->
+    <div class="d-sm align-items-center justify-content-between mb-4">
+
+        @using (@Html.BeginForm("DashBoard", "DashBoard", FormMethod.Post, new { id = "DashBoardForm" }))
+        {
+            <div class="container-fluid">
+                @Html.Partial("Filters", @Model)
+            </div>
+        }
+    </div>
+
+    <div id="divDashboard">
+    </div>
+
+</div>
+
+@section PageSpecificScripts{
+    <script>
+
+        $(function () {
+            $('#SelectStatus').hide();
+            $("#btnorderfilter").trigger("click");
+        });
+
+        $("#DashBoardForm").submit(function (e) {
+            debugger;
+            e.preventDefault();
+            var StatusItems = [];
+            var SellerItems = [];
+            var selected = $("#StatusItems option:selected");
+
+            selected.each(function () {
+                StatusItems.push($(this).val())
+            });
+
+            var Sellerselected = $("#SellerId option:selected");
+
+            Sellerselected.each(function () {
+                SellerItems.push($(this).val())
+            });
+
+            //var Model = { "FromDate": new Date($("#FromDate").val()), "ToDate": new Date($("#ToDate").val()), "StatusItems": StatusItems.join(','), "SellerId": SellerItems.join(',') }
+
+            var Model = { "FromDate": moment($("#FromDate").val(), 'DD/MM/YYYY').format('YYYY-MM-DD'), "ToDate": moment($("#ToDate").val(), 'DD/MM/YYYY').format('YYYY-MM-DD'), "StatusItems": StatusItems.join(','), "SellerId": SellerItems.join(',') }
+            $('#loadingDiv').show();
+            var form = $(this);
+            var url = form.attr('action');
+
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: Model,// form.serialize(), // serializes the form's elements.
+                success: function (data) {
+                    $('#divDashboard').empty().html(data);
+                    $('#loadingDiv').hide();
+                },
+                error: function (textStatus, errorThrown) {
+                    $('#loadingDiv').hide();
+                    console.log('DashBoardForm Failed textStatus = ' + textStatus + ' errorThrown = ' + errorThrown);
+                }
+            });
+
+        });
+    </script>
+}

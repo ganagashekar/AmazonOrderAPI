@@ -1,0 +1,63 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup Label="Globals">
+    <SccProjectName>SAK</SccProjectName>
+    <SccProvider>SAK</SccProvider>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccLocalPath>SAK</SccLocalPath>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="CoreExtentions\**" />
+    <Compile Remove="OrderMonitor\**" />
+    <EmbeddedResource Remove="CoreExtentions\**" />
+    <EmbeddedResource Remove="OrderMonitor\**" />
+    <None Remove="CoreExtentions\**" />
+    <None Remove="OrderMonitor\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Common\EnumOps\OrderItemStatusEnum.cs" />
+    <Compile Remove="Common\EnumOps\OrdersStatusEnum.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="OrderMonitor\GenerateRequestToken.cs" />
+    <Compile Include="OrderMonitor\SPOrders.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="8.0.0" />
+    <PackageReference Include="AWSSDK.SecurityToken" Version="3.7.1.26" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="2.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="2.1.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
+    <PackageReference Include="NLog" Version="4.6.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AmazonAPI.DataContext\AmazonOrderAPI.DataContext.csproj" />
+    <ProjectReference Include="..\AmazonOrderCommon\AmazonOrderExtentions.csproj" />
+    <ProjectReference Include="..\EzTrackerOrderClient\eZTrackerOrderClient.csproj" />
+    <ProjectReference Include="..\SellingPartnerCore\Amazon.APIEngine\Amazon.APIEngine.csproj" />
+    <ProjectReference Include="..\SellingPartnerCore\Amazon.SellingPartnerAPIAA\Amazon.SellingPartnerAPIAA.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="LoggerService">
+      <HintPath>..\AmazonOrderAPI\bin\Debug\netcoreapp2.2\LoggerService.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.EntityFrameworkCore">
+      <HintPath>..\LIb\Microsoft.EntityFrameworkCore.dll</HintPath>
+      <Private>true</Private>
+    </Reference>
+    <Reference Include="MWSClientCsRuntime-1.0">
+      <HintPath>..\LIb\MWSClientCsRuntime-1.0.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

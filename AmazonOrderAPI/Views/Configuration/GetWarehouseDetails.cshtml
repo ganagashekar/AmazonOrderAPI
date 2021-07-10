@@ -1,0 +1,129 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@model AmazonOrderAPI.Business.Model.WarehouseVM
+@inject IViewLocalizer Localizer
+<!--Hidden -->
+<form id="WareHouse-form" asp-controller="Configuration" asp-action="WareHouse" Method="post">
+
+    <input type="hidden" asp-for="@Model.Id" />
+    <input type="hidden" asp-for="@Model.SellerId" />
+    <div class="card mt-3">
+        <h5 class="card-header">@Model.WarehouseLocationName</h5>
+        <div class="card-body">
+            <!--Checkbox-->
+
+            <div class="form-group row">
+                <label asp-for="WarehouseLocationName" class="col-sm-3 col-form-label">
+                    @await Html.PartialAsync("Seller/Section/Label", "Location Name")
+                </label>
+                <div class="col-sm-9">
+                    <input type="text" required class="form-control" asp-for="WarehouseLocationName">
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="WarehouseLocationCode" class="col-sm-3 col-form-label">
+                    @await Html.PartialAsync("Seller/Section/Label", "Code")
+                </label>
+                <div class="col-sm-9">
+                    <input type="text" required class="form-control" asp-for="WarehouseLocationCode">
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="AddressLine1" class="col-sm-3 col-form-label">
+                    @await Html.PartialAsync("Seller/Section/Label", "AddressLine1")
+                </label>
+                <div class="col-sm-9">
+                    <input type="text" required class="form-control" asp-for="AddressLine1">
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="AddressLine2" class="col-sm-3 col-form-label">
+                    @await Html.PartialAsync("Seller/Section/Label", "AddressLine2")
+                </label>
+                <div class="col-sm-9">
+                    <input type="text" required class="form-control" asp-for="AddressLine2">
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="AddressLine3" class="col-sm-3 col-form-label">
+                    @await Html.PartialAsync("Seller/Section/Label", "AddressLine3")
+                </label>
+                <div class="col-sm-9">
+                    <input type="text" required class="form-control" asp-for="AddressLine3">
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="PostalCode" class="col-sm-3 col-form-label">
+                    @await Html.PartialAsync("Seller/Section/Label", "PostalCode")
+                </label>
+                <div class="col-sm-9">
+                    <input type="text" required class="form-control" asp-for="PostalCode">
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="Name" class="col-sm-3 col-form-label">
+                    @await Html.PartialAsync("Seller/Section/Label", "Name")
+                </label>
+                <div class="col-sm-9">
+                    <input type="text" required class="form-control" asp-for="Name">
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="Phone" class="col-sm-3 col-form-label">
+                    @await Html.PartialAsync("Seller/Section/Label", "Phone")
+                </label>
+                <div class="col-sm-9">
+                    <input type="number" required class="form-control" asp-for="Phone">
+                </div>
+            </div>
+
+            <!--Checkbox-->
+            <div class="form-group row">
+                <label asp-for="IsActive" class="col-sm-3 col-form-label">
+                    @await Html.PartialAsync("Seller/Section/Label", "IsActive")
+                </label>
+                <div class="col-sm-9">
+                    <toggle-button>
+                        <input asp-for="IsActive" type="checkbox">
+                    </toggle-button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <button type="submit" style="min-width:150px; float: right;" id="savewarehouse" class="btn btn-default">Submit</button>&nbsp;&nbsp;
+    <button type="button" style="min-width:150px; float: right;" class="btn btn-default" data-dismiss="modal">Close</button>
+</form>
+
+
+@section PageSpecificScripts{
+    <script>
+        $(function () {
+            $("#WareHouse-form").submit(function (e) {
+
+                e.preventDefault();
+
+                $('#myModal').modal('toggle');
+                var form = $(this);
+                var url = form.attr('action');
+
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: form.serialize(), // serializes the form's elements.
+                    success: function (data) {
+
+                        $('#divwarehousetable').empty().html(data);
+
+                    }
+                });
+
+            });
+        });
+    </script>
+}

@@ -1,0 +1,51 @@
+﻿
+
+
+===================================================
+25. IsPrime - object should be locked----Completed 
+26. show all four mobile numbers in popup-------Completed  
+27. Export File Name to be - Orders List.xls ----Completed 
+7.	Test case - show me one Order which has > 1 Order Item - how is this being processed.--Completed
+28. > 30 days we need to remove the data to archival separate table. --Completed 
+13.	Hide Delete options in Seller, and warehouse. In place of delete provide deactivate and activate. --Completed 
+29. date time - format - 24 hour format is better to read --Completed 
+30. DMY is best for all dates for all screens and calendar --Completed 
+Seller drop down is requried in Order report and dashboard - with all sellers option - after we provide login - then seller wise login will be enabled - if admin logins then he can see data for all sellers. --Completed 
+
+
+16.	Clone coding to be tested
+
+17.	Ramesh - hide the left blue bar navigation menu
+
+18.	Ramesh - Menu image icons etc, script file path related all errors
+
+19.	Rajasri - Bombax website - tracking with Pickup request number and customer reference number (or Amazon Order ID)
+
+20.	CMS - tracking with Pickup request number
+
+21.	In Grid - on Pickup Ref No hyperlink to open a tab to show tracking details - same like in courier window will open. Same with Order ID also
+
+22.	Rajasri - In Grid - if status is processed, then print icon required to print the AWB consignment Note print
+
+23.	Login using Single Signon.
+
+24.	After Login, the logo will be fetched from the login Service
+
+
+5th May 2019
+
+  Completed-----> 1.       Giving error Remove this link or correct this top left corner http://amz.bombax.in/Dashboard/index.html   
+  Completed-----> 2.       In dashboard - remove date time display.
+  Completed-----> 3.       Footer to be replaced - Powered By Softpal Technologies. Build - Ver 1.0   1 May 2019 14:00  
+  Completed-----> 4.       Remove top Search option.
+  Completed-----> 5.       Today, Yesterday./... button - which button is active need to be identifiable - bootstrap class
+  Completed-----> 6.       From Dashboard if we click on big boxes, based on the selection, display order report to show the records details
+ Not Completed--> 7.       Test case - show me one Order which has > 1 Order Item - how is this being processed.
+  Completed-----> 8.       Status drop down - multi selection to select more than one item
+  Completed-----> 9.       Order Date column is required in grid
+  Completed-----> 10.   Reduce width of drop off and pickup pincode columns so that order date can be added in grid
+  Completed-----> 11.   XLS export or CSV export required in the grid.
+  Completed-----> 12.   Loading screen to be modal window so that user cannot click till the first process is finished. Sometimes loading screen is NOT coming.
+  Completed-----> 13.   Hide Delete options in Seller, and warehouse. In place of delete provide deactivate and activate.
+  Completed-----> 14.   In seller screen - Add Seller, Search box and Search button can be one line
+  Completed-----> 15.   Grid column heading to be changed - show Order Item ID. Show Order ID and also Order Item ID both in the same column. Hyperlink can continue to be same as currently you have given that is on Order Item ID.

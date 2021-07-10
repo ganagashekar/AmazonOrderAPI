@@ -1,0 +1,42 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@using AmazonOrderAPI.Business.Common;
+
+@model AmazonOrderAPI.Business.Model.Seller.SellerVM
+@inject IViewLocalizer Localizer
+@{
+    ViewBag.Title = Localizer["PageTitle"];
+    Layout = "_Layout";
+}
+
+<form id="client-form" asp-controller="Configuration" asp-action="SellerSaveOrUpdate" Method="post">
+
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="row">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a asp-controller="Configuration" asp-action="Sellers">@Localizer["NavigationClients"]</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">@Model.SellerId</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+    @if (Model.Id != 0)
+    {
+        @await Html.PartialAsync("Seller/Section/ActionButtons")
+    }
+    @await Html.PartialAsync("Seller/Settings", Model)
+    @await Html.PartialAsync("Seller/Section/ActionButtons")
+</form>
+@section PageSpecificScripts{
+    <script>
+        $(function () {
+            //Disable enter for this form
+            FormMvc.disableEnter($('#client-form'));
+
+            //Radio image
+            $("label.radio-img>img").click(function () {
+                $(this).parent().find("input:radio").click();
+            });
+        });</script>
+}

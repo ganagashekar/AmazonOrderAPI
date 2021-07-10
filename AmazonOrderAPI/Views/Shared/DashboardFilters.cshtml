@@ -1,0 +1,86 @@
+﻿@model AmazonOrderAPI.Business.Model.Reports.OrderStatusReport
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (@Html.BeginForm("DashBoard", "Home", FormMethod.Post))
+{
+    <div class="container">
+        <div class='col-md-3'>
+            <label>
+                From Date
+            </label>
+            <div class="form-group" style="width:200px">
+                <div class='input-group date' id='datetimepicker6'>
+                    <input asp-for="FromDate" type='text' class="form-control" />
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class='col-md-3'>
+            <label>
+                To Date
+            </label>
+            <div class="form-group" style="width:200px">
+                <div class='input-group date' id='datetimepicker7'>
+                    <input asp-for="ToDate" type='text' class="form-control" />
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class='col-md-3'>
+            <label>
+                &nbsp;
+            </label>
+            <div class="form-group" style="width:200px">
+                <div class='input-group date' id='datetimepicker7'>
+                    @*<a href="~/DashBoard/DashBoard?Days=0" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Search </a>*@
+                    <button class="btn-primary " type="submit">Search </button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+@section PageSpecificScripts{
+    <script>
+
+        $(document).ready(function () {
+            var dateNow = new Date();
+            $(function () {
+                $('#datetimepicker6').datetimepicker({
+                    viewMode: 'days',
+                    format: 'DD/MM/YYYY',
+                    defaultDate: dateNow
+                }
+                );
+                $('#datetimepicker7').datetimepicker({
+                    viewMode: 'days',
+                    format: 'DD/MM/YYYY',
+                    defaultDate: dateNow,
+                    useCurrent: false //Important! See issue #1075
+                });
+                $("#datetimepicker6").on("dp.change", function (e) {
+                    $('#datetimepicker7').data("DateTimePicker").minDate(e.date);
+                });
+                $("#datetimepicker7").on("dp.change", function (e) {
+                    $('#datetimepicker6').data("DateTimePicker").maxDate(e.date);
+                });
+
+
+                $(document).on('mouseup touchend', function (e) {
+                    var container = $('.bootstrap-datetimepicker-widget');
+                    if (!container.is(e.target) && container.has(e.target).length === 0) {
+                        container.parent().datetimepicker('hide');
+                    }
+                });
+            });
+        });
+    </script>
+}

@@ -1,0 +1,457 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IViewLocalizer Localizer
+@{
+    ViewBag.Title = Localizer["OrderReport"];
+}
+@model AmazonOrderAPI.Business.Model.Reports.OrderStatusReport
+
+@section PageSpecificStyles{
+    <style>
+        .singlelinetext {
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        tbody th, table.dataTable tbody td {
+            padding: 1px 2px !important;
+        }
+
+        .modal-body {
+            padding: 0;
+        }
+    </style>
+}
+
+@section PageScripts{
+    <link href="~/css/buttons.dataTables.min.css" rel="stylesheet" />
+    <script src="~/js/dataTables.buttons.min.js"></script>
+    <script src="~/js/buttons.flash.min.js"></script>
+    <script src="~/js/buttons.html5.min.js"></script>
+    <script src="~/js/buttons.print.min.js"></script>
+    <script src="~/js/jszip.min.js"></script>
+}
+
+@Html.Hidden("MulChkOrdID")
+@Html.Hidden("MulChkSellerID")
+<div>
+    <div class="">
+        <div class="card shadow mb-0">
+            @*<div class="card-header py-3">
+
+                </div>*@
+            <div class="card-body">
+                <div class="row">
+                    <h6 class="m-0 font-weight-bold text-primary ml-3" style="display:inline; margin-left:2px">Order Data</h6>
+                    <button class="m-0 font-weight-bold btn btn-primary" onclick="GenerateMultiplePickup()">Generate Pickup</button>
+
+                    <div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-3">
+                        <label for="WarehouseId">
+                            @await Html.PartialAsync("Common/Label", "WareHouse")
+                        </label>
+                        <div class="">
+                            <select required="" class="form-control single-select" id="WarehouseId" name="WarehouseId"></select>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" style="width:100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th class="singlelinetext">Pickup</th>
+                                <th class="singlelinetext">Status</th>
+                                <th class="singlelinetext">OrderItemId</th>
+                                <th class="singlelinetext">OrderId</th>
+                                <th class="singlelinetext">Drop Off</th>
+                                <th class="singlelinetext">Pickup</th>
+                                <th class="singlelinetext">Order Date</th>
+                                <th class="singlelinetext">Cons. No</th>
+                                <th class="singlelinetext">Loc./Ref.No/SKU/</th>
+                                <th class="singlelinetext">Reason</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (var Item in Model.StatusReport)
+                            {
+                                <tr id="@Item.OrderId">
+
+
+                                    <td width="3%" style="text-align:center;">
+                                        @if (Item.Status == "Pending")
+                                        {
+                                            <input typeof="" type='checkbox' id='Cb_Check' onclick="onCheckOrderItem(@Item.sellerId,  @Item.Id ,this.checked)" style='text-align:center;' />
+                                        }
+                                        else
+                                        {
+                                            <input typeof="" type='checkbox' id='Cb_Check_disabled' style='text-align:center;' disabled />
+                                        }
+                                    </td>
+
+                                    <td width="3%" style="text-align:center;">
+                                        @if (Item.Status == "Failed")
+                                        {
+                                            <a href="#" onclick='"RetryOrder(" + Item.Id + ")"' class="btn btn-outline-danger">
+                                                @Item.Status
+                                                <img src="/img/Retry.png" />
+                                            </a>
+                                        }
+                                        else if (Item.Status == "Processed")
+                                        {
+                                            <a href="#" onclick='"AcknowledgeOrder(" + Item.Id + ")"' class="btn btn-outline-danger">
+                                                Acknowledge Order
+                                                <img src="/img/Retry.png" />
+                                            </a>
+                                        }
+                                        else if (Item.Status == "Invalid SKU")
+                                        {
+                                            <a href="#" class="btn">
+                                                @Item.Status
+                                            </a>
+                                        }
+                                        else if (Item.Status == "Acknowledged")
+                                        {
+                                            <a href="#" onclick='"FulfillOrder(" + Item.Id + ")"' class="btn btn-outline-danger">
+                                                Fulfill Order
+                                                <img src="/img/Retry.png" />
+                                            </a>
+                                        }
+                                        else if (Item.Status == "Fulfilled")
+                                        {
+                                            <a href="#" class="btn btn-outline-success">
+                                                @Item.Status
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <a href="#" class="btn btn-outline-info">
+                                                @Item.Status
+                                            </a>
+                                        }
+
+                                    </td>
+
+                                    @*<td width="5%" style="text-align:center">
+                                            <span style="display: inline-flex;" class="@(Item.Status=="Processed" ? "btn btn-success" :(Item.Status=="Failed"?"btn btn-outline-danger" :(Item.Status=="Invalid SKU" ?"btn":"btn btn-info")))">
+                                                @Item.Status @(Item.Status == "Failed" ? Html.Raw("&nbsp; <a  title='Retry' onclick='RetryOrder(" + Item.Id + ")'><img  style='height: 18px;' src='/img/Retry.png' /></a>") : Html.Raw(""))
+                                            </span>
+                                        </td>*@
+                                    <td width="10%"><a class="btn-outline-primary Order-modal" onclick="ViewOrderDetails(@Item.Id)" href="#" data-Id="@Item.Id">@Item.OrderId</a></td>
+                                    <td class="singlelinetext" width="15%">@Item.AmazonOrderId</td>
+                                    <td width="4%">@(Item.DropOffPincode+(string.IsNullOrEmpty(Item.DropOffPincode)?", ":"")+Item.DropOffCity)</td>
+                                    <td width="4%">@(Item.PickupPincode+ (string.IsNullOrEmpty(Item.PickupPincode) ? ", " : "") + Item.PickupCity)</td>
+                                    <td class="singlelinetext" width="8%">@Item.OrderDate.ToString("dd/MM/yyyy HH:mm:ss")</td>
+                                    <td width="7%">@Html.Raw(Item.ConsignmentNo)</td>
+                                    <td width="3%">@Html.Raw(Item.ReferenceNumber == "0" ? "" : Item.ReferenceNumber)</td>
+                                    <td class="singlelinetext" width="10%">@Item.Reason</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="OrderModal" role="dialog" style="width:99%;margin-left:auto;margin-right:auto;">
+    <div class="modal-dialog  mw-100 w-100">
+        <div class="modal-content">
+            <div class="modal-body">
+                <p>Loading..</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+
+        $('title').html("Order Report " + $("#FromDate").val() + " - " + $("#ToDate").val() + "");
+        $('#dataTable').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ]
+
+        });
+
+        $('#dataTable thead tr').clone(true).appendTo('#dataTable thead');
+        $('#dataTable thead tr:eq(1) th').each(function (i) {
+            var title = $(this).text();
+            $(this).html('<input type="text" style="width: 100%;" placeholder="Search ' + title + '" />');
+
+            $('input', this).on('keyup change', function () {
+                if ($('#dataTable').DataTable().column(i).search() !== this.value) {
+                    $('#dataTable').DataTable()
+                        .column(i)
+                        .search(this.value)
+                        .draw();
+                }
+            });
+            $('#dataTable thead tr:eq(1) th:nth-child(1)').html('');
+        });
+
+
+        $.fn.dataTable.ext.buttons.reload = {
+            text: 'Reload',
+            action: function (e, dt, node, config) {
+                dt.ajax.reload();
+            }
+        };
+
+        $('#myTable').DataTable({
+            ajax: '/api/data',
+            buttons: [
+                'reload'
+            ]
+        });
+    });
+
+    function onCheckOrderItem(SellerId, OrderItem, flag) {
+        debugger;
+        if (flag == true) {
+            var ChkIds = OrderItem;
+            if ($("#MulChkOrdID").val() == null || $("#MulChkOrdID").val() == "" || $("#MulChkOrdID").val() == undefined) {
+                $("#MulChkOrdID").val(ChkIds)
+            }
+            else {
+                $("#MulChkOrdID").val($("#MulChkOrdID").val() + ',' + ChkIds)
+            }
+            var ChkSellerIds = SellerId;
+            if ($("#MulChkSellerID").val() == null || $("#MulChkSellerID").val() == "" || $("#MulChkSellerID").val() == undefined) {
+                $("#MulChkSellerID").val(ChkSellerIds)
+            }
+            else {
+                $("#MulChkSellerID").val($("#MulChkSellerID").val() + ',' + ChkSellerIds)
+            }
+        }
+        else if (flag == false) {
+            var MulChkOrdID = $("#MulChkOrdID").val();
+            if (MulChkOrdID.includes(",")) {
+                var Id = ',' + OrderItem;
+                var Unchecked = MulChkOrdID.replace(Id, '');
+                $("#MulChkOrdID").val(Unchecked);
+            }
+            else {
+                var Unchecked = MulChkOrdID.replace(OrderItem, '');
+                $("#MulChkOrdID").val(Unchecked);
+            }
+            var MulChkSellerID = $("#MulChkSellerID").val();
+            if (MulChkSellerID.includes(",")) {
+                var Id = ',' + SellerId;
+                var Unchecked = MulChkSellerID.replace(Id, '');
+                $("#MulChkSellerID").val(Unchecked);
+            }
+            else {
+                var Unchecked = MulChkSellerID.replace(SellerId, '');
+                $("#MulChkSellerID").val(Unchecked);
+            }
+        }
+        var SellerIdSet = getSellerIdSet();
+        if (SellerIdSet == null || SellerIdSet == undefined || SellerIdSet == "" || SellerIdSet.size == 0) {
+            //Do Nothing as no Checkboxes are Selected
+        }
+        else if (SellerIdSet.size > 1) {
+            alert("Please Select CheckBox Only For One Seller")
+        }
+        else {
+            for (let SellerId of SellerIdSet) {
+                GetWareHouseDropDown(SellerId);
+            }
+        }
+    }
+
+    function GetWareHouseDropDown(SellerId) {
+        $("#WarehouseId").empty();
+        $.ajax({
+            type: "Get",
+            url: '/Home/GetWareHouseDropDown?SellerId=' + SellerId,
+            success: function (data) {
+                $.each(data, function (i, obj) {
+                    alert(obj.value + ":" + obj.text);
+                    var div_data = "<option value=" + obj.value + ">" + obj.text + "</option>";
+                    $(div_data).appendTo('#WarehouseId');
+                });  
+
+            }
+        });
+    }
+
+    function getSellerIdSet() {
+        var MulChkSellerID = $("#MulChkSellerID").val();
+        var SellerIDDetails = MulChkSellerID.split(',');
+        var SellerIdSet = new Set();
+
+        for (var i = 0; i < SellerIDDetails.length; i++) {
+            SellerIdSet.add()
+        }
+        return SellerIdSet;
+    }
+
+    function GenerateMultiplePickup() {
+        debugger;
+        var MulChkOrdID = $("#MulChkOrdID").val();
+        var OrderIdDeatils = MulChkOrdID.split(',');
+
+        if (MulChkOrdID == undefined || MulChkOrdID == null || MulChkOrdID == "") {
+            alert("Please Select atleast one Order")
+        }
+        else {
+            var SellerIdSet = getSellerIdSet();
+
+            if (SellerIdSet == null || SellerIdSet == undefined || SellerIdSet == "" || SellerIdSet.size == 0) {
+                alert("Something Went Wrong. Please Contact Administrator")
+            }
+            else if (SellerIdSet.size > 1) {
+                alert("Please Select CheckBox Only For One Seller")
+            }
+            else {
+
+                var WarehouseId = $("#WarehouseId option:selected").val(); 
+
+                for (var i = 0; i < OrderIdDeatils.length; i++) {
+                    debugger;
+                    OrderIdDeatils[i] = OrderIdDeatils[i].replace(/^\s*/, "").replace(/\s*$/, "");
+                    debugger;
+                    generateSinglePickup(WarehouseId, OrderIdDeatils[i]);
+                }
+                RefreshOrder();
+            }
+        }
+    }
+
+    function RetryOrder(OrderItem) {
+        $('#loadingDiv').show();
+        $.ajax({
+            type: "Get",
+            url: '/Home/RetryOrder?OrderId=' + OrderItem,
+            success: function (data) {
+                $('#loadingDiv').hide();
+                //$('#OrderModal').modal('show').find('.modal-body').html(data);
+                RefreshOrder();
+            },
+            error: function (textStatus, errorThrown) {
+                $('#loadingDiv').hide();
+                console.log('RetryOrder Failed textStatus = ' + textStatus + ' errorThrown = ' + errorThrown);
+            }
+        });
+
+        // window.location.href = '/Home/RetryOrder?OrderId=' + OrderItem + "&FromDate=" + $('#FromDate').val() + "&Todate=" + $('#ToDate').val();
+    }
+
+    function AcknowledgeOrder(OrderItem) {
+        $('#loadingDiv').show();
+        $.ajax({
+            type: "Get",
+            url: '/Home/AcknowledgeOrder?OrderId=' + OrderItem,
+            success: function (data) {
+                $('#loadingDiv').hide();
+                RefreshOrder();
+            },
+            error: function (textStatus, errorThrown) {
+                $('#loadingDiv').hide();
+                console.log('AcknowledgeOrder Failed textStatus = ' + textStatus + ' errorThrown = ' + errorThrown);
+            }
+        });
+    }
+
+    function FulfillOrder(OrderItem) {
+        $('#loadingDiv').show();
+        $.ajax({
+            type: "Get",
+            url: '/Home/FulfillOrder?OrderId=' + OrderItem,
+            success: function (data) {
+                $('#loadingDiv').hide();
+                RefreshOrder();
+            },
+            error: function (textStatus, errorThrown) {
+                $('#loadingDiv').hide();
+                console.log('FulfillOrder Failed textStatus = ' + textStatus + ' errorThrown = ' + errorThrown);
+            }
+        });
+    }
+
+    function generateSinglePickup(WarehouseId, OrderItem) {
+        $('#loadingDiv').show();
+        $.ajax({
+            type: "Get",
+            url: '/Home/PickupOrder?OrderId=' + OrderItem + '&WarehouseId=' + WarehouseId,
+            success: function (data) {
+                $('#loadingDiv').hide();
+            },
+            error: function (textStatus, errorThrown) {
+                $('#loadingDiv').hide();
+                console.log('generateSinglePickup Failed textStatus = ' + textStatus + ' errorThrown = ' + errorThrown);
+            }
+        });
+
+        // window.location.href = '/Home/RetryOrder?OrderId=' + OrderItem + "&FromDate=" + $('#FromDate').val() + "&Todate=" + $('#ToDate').val();
+    }
+
+    function RefreshOrder() {
+
+        var form = null;
+        var Url = null;
+        var divId = null;
+        if ($('#OrderReportForm').length != 0) {
+            form = $('#OrderReportForm');
+            Url = form.attr('action');
+            divId = '#StatusReport';
+
+            var StatusItems = [];
+            var SellerItems = [];
+            var selected = $("#StatusItems option:selected");
+
+            var Sellerselected = $("#SellerId option:selected");
+
+            Sellerselected.each(function () {
+                SellerItems.push($(this).val())
+            });
+
+            selected.each(function () {
+                StatusItems.push($(this).val())
+            });
+            var Model = { "FromDate": moment($("#FromDate").val(), 'DD/MM/YYYY').format('YYYY-MM-DD'), "ToDate": moment($("#ToDate").val(), 'DD/MM/YYYY').format('YYYY-MM-DD'), "StatusItems": StatusItems.join(','), "SellerId": SellerItems.join(',') }
+            $('#loadingDiv').show();
+            $.ajax({
+                type: "POST",
+                url: Url,
+                data: Model, // serializes the form's elements.
+                success: function (data) {
+                    $(divId).empty().html(data);
+                    $('#loadingDiv').hide();
+                },
+                error: function (textStatus, errorThrown) {
+                    $('#loadingDiv').hide();
+                    console.log('RefreshOrder Failed textStatus = ' + textStatus + ' errorThrown = ' + errorThrown);
+                }
+            });
+        };
+
+        if ($('#DashBoardForm').length != 0) {
+            LoadOrderReport(StatusId)
+        };
+
+    }
+    function ViewOrderDetails(id) {
+
+        $('#OrderModal').modal('show').find('.modal-body').empty();
+        // $('#OrderModal').modal('show').find('.modal-body').load('/Home/GetOrderDetails?OrderId=' + id);
+
+        $('#loadingDiv').show();
+        $.ajax({
+            type: "Get",
+            url: '/Home/GetOrderDetails?OrderId=' + id,
+            success: function (data) {
+                $('#loadingDiv').hide();
+                $('#OrderModal').modal('show').find('.modal-body').html(data);
+            },
+            error: function (textStatus, errorThrown) {
+                $('#loadingDiv').hide();
+                console.log('ViewOrderDetails Failed textStatus = ' + textStatus + ' errorThrown = ' + errorThrown);
+            }
+        });
+    }
+</script>
+

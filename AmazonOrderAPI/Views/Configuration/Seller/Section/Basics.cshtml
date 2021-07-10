@@ -1,0 +1,147 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@model AmazonOrderAPI.Business.Model.Seller.SellerVM
+@inject IViewLocalizer Localizer
+<!--Hidden -->
+<input type="hidden" asp-for="Id" />
+
+<div class="card mt-3">
+
+    <div class="card-body">
+        <!--Checkbox-->
+        @*<div class="form-group row">
+            <label asp-for="AppName" class="col-sm-3 col-form-label">
+                @await Html.PartialAsync("Seller/Section/Label", "App Name")
+            </label>
+            <div class="col-sm-9">
+                <input type="text" required class="form-control" asp-for="AppName">
+            </div>
+        </div>*@
+
+        <div class="form-group row">
+            <label asp-for="AccessKey" class="col-sm-3 col-form-label">
+                @await Html.PartialAsync("Seller/Section/Label", "Access Key")
+            </label>
+            <div class="col-sm-9">
+                <input type="text" required class="form-control" asp-for="AccessKey">
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label asp-for="MarketplaceId" class="col-sm-3 col-form-label">
+                @await Html.PartialAsync("Seller/Section/Label", "Marketplace Id")
+            </label>
+            <div class="col-sm-9">
+                <input type="text" required class="form-control" asp-for="MarketplaceId">
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label asp-for="MWSAuthToken" class="col-sm-3 col-form-label">
+                @await Html.PartialAsync("Seller/Section/Label", "MWS Auth Token")
+            </label>
+            <div class="col-sm-9">
+                <input type="text" required class="form-control" asp-for="MWSAuthToken">
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label asp-for="SecretKey" class="col-sm-3 col-form-label">
+                @await Html.PartialAsync("Seller/Section/Label", "Secret Key")
+            </label>
+            <div class="col-sm-9">
+                <input type="text" required class="form-control" asp-for="SecretKey">
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label asp-for="CustomerCode" class="col-sm-3 col-form-label">
+                @await Html.PartialAsync("Seller/Section/Label", "Customer Code")
+            </label>
+            <div class="col-sm-9">
+                <input type="text" required class="form-control" asp-for="CustomerCode">
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label asp-for="ClientId" class="col-sm-3 col-form-label">
+                @await Html.PartialAsync("Seller/Section/Label", "Client Id")
+            </label>
+            <div class="col-sm-9">
+                <input type="text" required class="form-control" asp-for="ClientId">
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label asp-for="CreatedBy" class="col-sm-3 col-form-label">
+                @await Html.PartialAsync("Seller/Section/Label", "Created By User ID")
+            </label>
+            <div class="col-sm-9">
+                <input type="text" required class="form-control" asp-for="CreatedBy">
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label asp-for="Country" class="col-sm-3 col-form-label">
+                @await Html.PartialAsync("Seller/Section/Label", "Country Name")
+            </label>
+            <div class="col-sm-9">
+                <input type="text" required class="form-control" asp-for="Country">
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label asp-for="ServiceURL" class="col-sm-3 col-form-label">
+                @await Html.PartialAsync("Seller/Section/Label", "Service URL")
+            </label>
+            <div class="col-sm-9">
+                <input type="text" required class="form-control" asp-for="ServiceURL">
+            </div>
+        </div>
+        <!--Checkbox-->
+
+        <div class="form-group row">
+            <label asp-for="IsAutoManual" class="col-sm-3 col-form-label">
+                @await Html.PartialAsync("Seller/Section/Label", " Generate Auto Pickup ")
+            </label>
+            <div class="col-sm-9">
+                <toggle-button>
+                    <input asp-for="IsAutoManual" class="form-control" required type="checkbox">
+                </toggle-button>
+            </div>
+
+        </div>
+
+        <div class="form-group row">
+            <label asp-for="IsShouldbeGenConsNo" class="col-sm-3 col-form-label">
+                @await Html.PartialAsync("Seller/Section/Label", "Generate AWB No.")
+            </label>
+            <div class="col-sm-9">
+                <toggle-button>
+                    <input asp-for="IsShouldbeGenConsNo" class="form-control" required type="checkbox">
+                </toggle-button>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label asp-for="IsStage" class="col-sm-3 col-form-label">
+                @await Html.PartialAsync("Seller/Section/Label", "Is Staging")
+            </label>
+            <div class="col-sm-9">
+                <toggle-button>
+                    <input asp-for="IsStage" class="form-control" required type="checkbox">
+                </toggle-button>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label asp-for="IsStage" class="col-sm-3 col-form-label">
+                @await Html.PartialAsync("Seller/Section/Label", "Is Active")
+            </label>
+            <div class="col-sm-9">
+                <toggle-button>
+                    <input asp-for="IsActive" class="form-control" required type="checkbox">
+                </toggle-button>
+            </div>
+        </div>
+    </div>
+</div>

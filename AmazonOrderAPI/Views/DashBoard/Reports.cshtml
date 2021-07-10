@@ -1,0 +1,34 @@
+﻿@model AmazonOrderAPI.Business.Model.Reports.OrderStatusReport
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    ViewData["Title"] = "OrderReport";
+}
+@section PageSpecificStyles{
+    <style>
+        .btn-danger {
+            min-width: 96%;
+        }
+    </style>
+}
+
+@using (@Html.BeginForm("OrderReport", "DashBoard", FormMethod.Post, new { id = "OrderReportForm" }))
+{
+    <div class="container-fluid">
+
+        @Html.Partial("Filters", @Model)
+    </div>
+}
+
+<div id="StatusReport">
+</div>
+@section PageSpecificScripts{
+    <script>
+        $(document).ready(function () {
+            $('#loadingDiv').hide();
+            $("#btnorderfilter").trigger("click");
+        });
+    </script>
+}

@@ -1,0 +1,13 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@model AmazonOrderAPI.Business.Model.Seller.SellerVM
+@inject IViewLocalizer Localizer
+<div class="row client">
+    <div class="col-md-12 action-butons">
+        <button type="submit"  class="client-save-button btn btn-primary">@Localizer["ButtonSave"]</button>
+        @if (Model.Id != 0)
+		{
+        @*<a asp-action="SellerClone" asp-route-id="@Model.Id"   class="btn btn-outline-primary">@Localizer["ButtonClone"]</a>*@
+        @*<a asp-action="SellerDelete" asp-route-id="@Model.Id" class="btn btn-danger">@Localizer["ButtonDelete"]</a>*@
+		}
+    </div>
+</div>

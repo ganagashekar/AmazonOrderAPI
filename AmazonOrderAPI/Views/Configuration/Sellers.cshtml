@@ -1,0 +1,67 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@using AmazonOrderAPI.Business.Common;
+
+@model AmazonOrderAPI.Business.Model.Seller.SellersVM
+@inject IViewLocalizer Localizer
+@{
+    ViewBag.Title = Localizer["PageTitle"];
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="row">
+    <div class="col-12">
+        <h5>@Localizer["PageTitle"]</h5>
+    </div>
+    <div class="col-9">
+        @await Html.PartialAsync("Common/Search", new Search() { Action = "Sellers", Controller = "Configuration" })
+    </div>
+    <div class="col-9">
+
+        <a asp-action="Seller" class="btn btn-outline-primary mb-3"><span class="oi oi-plus"></span> @Localizer["ButtonAddNewClient"]</a>
+    </div>
+</div>
+
+<div id="SellerReport">
+    <div class="">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Seller</h6>
+            </div>
+            <div class="card-body pt-1">
+                <div class="table-responsive">
+
+                    <table class="table table-striped mb-0">
+                        <thead>
+                            <tr>
+                                <th class="border-top-0"></th>
+                                <th class="border-top-0">@Localizer["TableClientId"]</th>
+                                <th class="border-top-0">@Localizer["TableClientName"]</th>
+                                <th class="border-top-0"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var client in Model.Sellers)
+                            {
+                                <tr>
+                                    <th><a class="btn btn-primary" asp-action="Seller" asp-route-id="@client.Id">@Localizer["TableButtonEdit"]</a></th>
+                                    @*<td>@client.Id</td>*@
+                                    <td>@client.SellerId</td>
+                                    <td>@client.SellerName</td>
+                                    <td>
+                                        @*<a class="btn btn-danger" asp-action="SellerDelete" asp-route-id="@client.Id"><span class="oi oi-x"></span></a>*@
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                @await Html.PartialAsync("Common/Pager", new Pager { Action = "Sellers", PageSize = Model.PageSize, TotalCount = Model.TotalCount, Search = ViewBag.Search, EnableSearch = true })
+            </div>
+        </div>
+    </div>
+</div>
